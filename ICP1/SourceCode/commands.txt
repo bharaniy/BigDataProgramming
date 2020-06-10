@@ -1,0 +1,6 @@
+hadoop fs 
+hadoop fs - copyFromLocal /home/cloudera/Downloads/shakespeare.txt
+hadoop fs -appendToFile home/cloudera/Downloads/word_list.txt shakespeare.txt
+hadoop fs -cat shakespeare.txt | head -n 5 
+hadoop fs -cat shakespeare.txt | tail -n 5 
+hadoop fs -text *.txt | hadoop fs -put - allfiless.txt
