@@ -20,7 +20,7 @@ select distributer_id, vol_OUT from petrol order by vol_OUT desc limit 10;
 select distributer_id, vol_OUT from petrol order by vol_OUT limit 10;
 
 #4
-select distributer_name, year from petrol where (vol_IN-vol_OUT) > 400;
+select distributer_name, year from petrol where (vol_IN-vol_OUT) > 450;
 
 #5
 select distributer_name, sum(vol_OUT) FROM petrol group by distributer_name;
@@ -64,11 +64,11 @@ load data local inpath '/home/cloudera/Downloads/movielens/movies.csv' into tabl
 
 create table ratings (userId STRING, movieId INT, rating DECIMAL(2,1), timestamp STRING) row format delimited fields terminated by ',' stored as textfile;
 
-load data local inpath '/home/cloudera/Downloads/movielens/movies.csv' into table ratings;
+load data local inpath '/home/cloudera/Downloads/movielens/ratings.csv' into table ratings;
 
 create table users (userId INT, gender STRING, occupation INT,zipcode INT) row format delimited fileds terminated by ',' stored as textfile;
 
-load data local inpath '/home/cloudera/Downloads/movielens/movies.csv'  into table users;
+load data local inpath '/home/cloudera/Downloads/movielens/users.csv'  into table users;
 
 
 #2
