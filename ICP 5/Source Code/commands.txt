@@ -1,0 +1,97 @@
+1) To import and export tables from mySQL to HDFS
+Import from mySQL to HDFS
+
+#starting mysql service
+sudo service mysqld start
+mysql -uroot -pcloudera
+
+#create a new database
+create database db1;
+
+#select database 
+use db1;
+
+#create a table
+ mysql> create table courses(id INT NOT NULL, name VARCHAR(20), description VARCHAR(20), professor VARCHAR(20), PRIMARY KEY(id);
+
+#To insert records into table
+mysql> insert into courses values(1,'BDP','Big data programming','Dr Lee');
+mysql> insert into courses values(2,'python','python and deep learning','Dr Lee');
+mysql> insert into courses values(3,'pa','parallel algorithms','Yigie Han');
+mysql> insert into courses values(4,'daa','design and analysis','Sejun song');
+
+
+#select all records from the table to display
+select * from courses;
+
+
+#import table into hdfs
+sqoop import --connect jdbc:mysql://localhost/db1 --username root --password cloudera --table courses --m 1
+
+
+#list table in hdfs
+hadoop fs -ls
+
+hadoop fs -ls student/
+
+#display the table contents
+hadoop fs -cat courses/*
+
+
+
+use db1;
+# To create a table in mysql to export the data from hadoop 
+mysql > create table coursesavailable (id INT NOT NULL, name VARCHAR(20), description VARCHAR(20), professor VARCHAR(20), PRIMARY KEY(id));
+
+#To export table from hadoop
+sqoop export --connect jdbc:mysql://localhost/test --username root --password cloudera --table coursesavailable  --export-dir courses/part-m-00000
+
+
+#To see the tables and records in mysql 
+mysql > show tables;
+mysql > select * from coursesavailable;
+
+2)
+## Creating Hive Tables
+
+
+#To activate hive
+hive
+
+hive > show tables;
+
+#create a table in hive warehouse 
+hive> CREATE TABLE course(id INT, coursename STRING, coursedescription STRING, professorname STRING) row format delimited fields terminated by ',' stored as textfile;
+
+#load data from the table in hdfs 
+hive> LOAD DATA INPATH 'courses/' INTO TABLE course;
+
+#show 10 records 
+hive> select * from ogrenci limit 10;
+
+
+
+#list the tables in hive warehouse
+hadoop fs -ls /user/hive/warehouse/
+
+# Create table in mysql 
+mysql > create table fromhive(id INT NOT NULL, name VARCHAR(20), description VARCHAR(20), prof VARCHAR(20), PRIMARY KEY(id));
+
+#export table from hive into mysql
+sqoop export --connect jdbc:mysql://localhost/db1 --username root --password cloudera --table fromhive --export-dir /user/hive/warehouse/courses -m 1
+
+#list tables 
+mysql> show tables
+
+#list the records
+mysql> select * from shakespeare;
+
+
+#Statistic query
+hive > analyze table shakespeare compute statistics;
+
+#WordCount query
+hive> select word,count(1) as count from(select explode(split(name,'//s')) as word from shakespeare) temptable group by word;
+
+# Identifying pattern query
+hive > select regexp replace('PRINCE','1.*\\.(FAREWELL)$','');
