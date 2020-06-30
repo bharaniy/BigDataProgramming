@@ -1,0 +1,37 @@
+cqlsh:cs>create table emp (employee_id int PRIMARY KEY, department text, lastname text, years_with_company int, hiredate text, jobtitle text, salary int, managerid int);
+
+cqlsh:cs>copy emp (employee_id, department, lastname, years_with_company, hiredate, jobtitle, salary, managerid) from 'C:\Users\bharani\Downloads\employee_entries.csv' WITH DELIMITER='|' AND HEADER = TRUE;
+
+cqlsh:cs>select employee_id, lastname, jobtitle, hiredate from emp;
+
+cqlsh:cs>select lastname, salary from emp where jobtitle ='clerks' allow filtering;
+
+cqlsh:cs>select lastname, jobtitle, salary from emp where hiredate='2000-02-18' allow filtering;
+
+cqlsh:cs>select lastname, salary from emp;
+
+cqlsh:cs>select lastname, salary, managerid from emp where salary=45000 allow filtering;
+
+cqlsh:cs>C:\Program Files\apache-cassandra-3.11.6\bin>> c:\python27\python cqlsh.py
+
+cqlsh:cs>CREATE CUSTOM INDEX  fn_prefix ON emp (lastname) USING 'org.apache.cassandra.index.sasi.SASIIndex';
+SELECT * FROM emp WHERE lastname LIKE 'G%';
+
+
+books dataset:
+
+cqlsh:cs>create table books (book_id int PRIMARY KEY, category text, title text, author text, publisher text, pub_date text, number_pages int);
+
+cqlsh:cs>copy books (book_id , category , title , author , publisher , pub_date , number_pages) from 'C:\Users\bharani\Downloads\book_entries.csv' WITH DELIMITER='|' AND HEADER = TRUE;
+
+cqlsh:cs>select book_id, title, publisher, pub_date from books;
+
+cqlsh:cs>select title, author from books where publisher='Penguin' allow filtering;
+
+cqlsh:cs>select title, author, publisher, category from books where pub_date='2014-09-30' allow filtering;
+
+cqlsh:cs>select title, publisher from books;
+
+cqlsh:cs>select title, author, category, publisher from books where number_pages=500 allow filtering;
+
+
